@@ -1,8 +1,15 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
+      options: {
+        separator: ';',
+      },
+      dist: {
+        src: ['public/client/**/*.js'],
+        dest: 'public/dist/build.js',
+      },
     },
 
     mochaTest: {
@@ -21,16 +28,26 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      options: {
+        mangle: false
+      },
+      my_target: {
+        files: {
+          'public/dist/build.js': ['public/dist/build.js']
+        }
+      }
     },
 
     eslint: {
-      target: [
-        // Add list of files to lint here
-      ]
+
+      // options: {
+      //   format: require('eslint-tap')
+      // },
+      // all: ['public/client/**/*.js']
+
     },
 
-    cssmin: {
-    },
+    cssmin: {},
 
     watch: {
       scripts: {
@@ -50,8 +67,7 @@ module.exports = function(grunt) {
     },
 
     shell: {
-      prodServer: {
-      }
+      prodServer: {}
     },
   });
 
@@ -63,9 +79,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-nodemon');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-eslint');
+
 
   grunt.registerTask('server-dev', function (target) {
-    grunt.task.run([ 'nodemon', 'watch' ]);
+    grunt.task.run(['nodemon', 'watch']);
   });
 
   ////////////////////////////////////////////////////
@@ -76,19 +96,19 @@ module.exports = function(grunt) {
     'mochaTest'
   ]);
 
-  grunt.registerTask('build', [
-  ]);
+  grunt.registerTask('build', []);
 
-  grunt.registerTask('upload', function(n) {
+  grunt.registerTask('upload', function (n) {
     if (grunt.option('prod')) {
       // add your production server task here
     } else {
-      grunt.task.run([ 'server-dev' ]);
+      grunt.task.run(['server-dev']);
     }
   });
 
   grunt.registerTask('deploy', [
     // add your deploy tasks here
+
   ]);
 
 
